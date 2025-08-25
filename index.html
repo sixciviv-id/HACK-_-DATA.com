@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Warning - Fake Ransomware</title>
+<style>
+  body {
+    background-color: black;
+    color: red;
+    font-family: monospace;
+    text-align: center;
+    padding: 20px;
+    animation: flash 1s infinite;
+  }
+
+  @keyframes flash {
+    0% { color: red; background-color: black; }
+    50% { color: black; background-color: red; }
+    100% { color: red; background-color: black; }
+  }
+
+  .warning {
+    font-size: 28px;
+    font-weight: bold;
+    margin-top: 20px;
+  }
+
+  .data-box {
+    background: #111;
+    color: #0f0;
+    padding: 15px;
+    border: 2px solid red;
+    margin: 20px auto;
+    width: 90%;
+    height: 300px;
+    overflow-y: auto;
+    text-align: left;
+  }
+
+  .input-box {
+    margin-top: 20px;
+  }
+
+  input {
+    padding: 10px;
+    font-size: 16px;
+    width: 200px;
+  }
+
+  button {
+    padding: 10px 20px;
+    background: red;
+    border: none;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    margin-left: 10px;
+  }
+
+  button:hover {
+    background: darkred;
+  }
+</style>
+</head>
+<body>
+  <div class="warning">⚠️ WARNING! DEVICE ENCRYPTED ⚠️</div>
+  <p>Semua file di perangkat Anda sedang dienkripsi...<br>
+     Masukkan PIN untuk menghentikan proses.</p>
+
+  <div class="data-box" id="dataBox"></div>
+
+  <div class="input-box">
+    <input type="password" placeholder="Enter PIN" id="pin">
+    <button onclick="checkPin()">Unlock</button>
+  </div>
+
+  <p id="result"></p>
+
+<script>
+let box = document.getElementById("dataBox");
+
+// bikin ribuan file palsu
+let files = [];
+let folder = ["/storage/emulated/0/Download/", "/storage/emulated/0/DCIM/Camera/",
+              "/storage/emulated/0/Music/", "/storage/emulated/0/Documents/",
+              "/storage/emulated/0/Android/data/", "/system/", "/data/data/"];
+
+for (let f of folder) {
+  for (let i=1; i<=200; i++) { // jumlah file bisa diganti lebih banyak
+    files.push(f + "file" + i + ".dat");
+  }
+}
+
+// animasi nulis terus
+let i = 0;
+function addLine() {
+  if (i < files.length) {
+    let p = document.createElement("p");
+    p.textContent = "[ENCRYPTED] " + files[i];
+    box.appendChild(p);
+    box.scrollTop = box.scrollHeight; // auto scroll kebawah
+    i++;
+    setTimeout(addLine, 50); // speed enkripsi (ms)
+  } else {
+    // selesai fake enkripsi
+    let done = document.createElement("p");
+    done.style.color = "red";
+    done.textContent = "!!! Semua data telah terenkripsi !!!";
+    box.appendChild(done);
+    box.scrollTop = box.scrollHeight;
+  }
+}
+addLine();
+
+function checkPin() {
+  let pin = document.getElementById("pin").value;
+  let result = document.getElementById("result");
+  if(pin === "1234"){
+    result.innerHTML = "<span style='color:lime'>✅ Data berhasil dipulihkan!</span>";
+    document.body.style.animation = "none";
+    document.body.style.background = "black";
+    document.body.style.color = "lime";
+    box.innerHTML = "<p>All files successfully restored!</p>";
+    i = files.length; // stop animasi
+  } else {
+    result.innerHTML = "<span style='color:red'>❌ PIN salah! Proses enkripsi tetap berjalan.</span>";
+  }
+}
+</script>
+</body>
+</html>
